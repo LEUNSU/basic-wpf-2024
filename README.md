@@ -145,4 +145,14 @@ IoT 개발자 WPF 학습리포지토리
 ## 7일차
 - MovieFinder 2024 완료
 - 데이터포털 API 연동앱 예제
-    - 5월 13일 개인 프로젝트 참조소스
+    - CefSharp 사용 시 플랫폼 대상 AnyCPU에서 x64로 변경 필수
+    - MahApps.Metro UI, IconPacks
+    - Newtonsoft.Json
+    - 개인 프로젝트 참조 소스
+
+
+## 8일차
+- WPF 개인프로젝트 포트폴리오 작업
+    - 데이터포털 API 사용할 것
+    - 7일차 소스 참조
+    - 현재 리포지토리에 사진과 함께 올릴 것
