@@ -53,7 +53,7 @@ IoT 개발자 WPF 학습리포지토리
         - ViewModel : 뷰에 대한 메서드, 액션, INotifyPropertyChanged를 구현
 
         ![MVVM패턴](https://raw.githubusercontent.com/LEUNSU/basic-wpf-2024/main/images/wpf001.png)
-
+        
     - 권장 구현방법
         - ViewModel 생성, 알림 속성 구현,
         - View에 ViewModel을 데이터 바인딩
