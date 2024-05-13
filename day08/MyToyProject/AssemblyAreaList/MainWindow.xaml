@@ -1,0 +1,59 @@
+﻿<mah:MetroWindow 
+        x:Class="AssemblyAreaList.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:iconPack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:local="clr-namespace:AssemblyAreaList"
+        mc:Ignorable="d"
+        Title="Earthquake AssemblyArea List " Height="450" Width="800" Loaded="MetroWindow_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="61*" />
+                <ColumnDefinition Width="99*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="부산광역시 지진 발생 옥외대피장소" FontSize="16" FontWeight="Bold" Margin="20,10,20,10" />
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center"  Width="495">
+                <Button Content="조회" Width="100" Margin="5,10" 
+                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}" 
+                        Click="Button_Click" />
+
+                <ComboBox x:Name="CboDistrict"  Width="150" Margin="5,10,10,10"
+                          Style="{StaticResource MahApps.Styles.ComboBox}"
+                          mah:TextBoxHelper.Watermark="구 선택" 
+                          mah:TextBoxHelper.UseFloatingWatermark="True" 
+                          mah:TextBoxHelper.ClearTextButton="True"
+                          SelectionChanged="CboDistrict_SelectionChanged"/>
+
+                <ComboBox x:Name="CboNeighborhood" Width="150" Margin="5,10,10,10"
+                          Style="{StaticResource MahApps.Styles.ComboBox}"
+                          mah:TextBoxHelper.Watermark="동 선택" 
+                          mah:TextBoxHelper.UseFloatingWatermark="True" 
+                          mah:TextBoxHelper.ClearTextButton="True" />
+                <!--SelectionChanged="CboNeighborhood_SelectionChanged"/>-->
+            </StackPanel>
+        </Grid>
+
+        <DataGrid x:Name="GrdResult" Grid.Row="1" Margin="10"
+          IsReadOnly="True" ItemsSource="{Binding}"
+          Style="{StaticResource MahApps.Styles.DataGrid.Azure}" />
+
+        <StatusBar Grid.Row="2">
+            <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}" />
+            <StatusBarItem x:Name="StsResult" />
+        </StatusBar>
+    </Grid>
+
+</mah:MetroWindow>
