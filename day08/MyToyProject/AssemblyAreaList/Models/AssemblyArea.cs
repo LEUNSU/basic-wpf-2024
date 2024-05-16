@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AssemblyAreaList.Models
+﻿namespace AssemblyAreaList.Models
 {
     public class AssemblyArea
     {
@@ -75,5 +69,6 @@ namespace AssemblyAreaList.Models
                                                               ,[Rn_adres] 
                                                           FROM [dbo].[AssemblyArea]";
 
+       
     }
 }

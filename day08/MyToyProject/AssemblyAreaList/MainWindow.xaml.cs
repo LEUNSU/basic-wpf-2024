@@ -1,13 +1,14 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.IO;
 using System.Net;
 using System.Windows;
 using AssemblyAreaList.Models;
+using ControlzEx.Standard;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
-using static System.Net.WebRequestMethods;
 
 namespace AssemblyAreaList
 {
@@ -19,32 +20,6 @@ namespace AssemblyAreaList
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            InitComboDateFromDB();
-        }
-
-        private void InitComboDateFromDB()
-        {
-            using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand($"SELECT sgg_nm FROM AssemblyArea WHERE sgg_nm = @SelectedDistrict", conn);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataSet dSet = new DataSet();
-                adapter.Fill(dSet);
-                List<string> sggNms = new List<string>();
-
-                foreach (DataRow row in dSet.Tables[0].Rows)
-                {
-                    sggNms.Add(Convert.ToString(row["sgg_nm"]));
-                }
-
-                CboDistrict.ItemsSource = sggNms;
-            }
-
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -64,7 +39,7 @@ namespace AssemblyAreaList
                 reader = new StreamReader(res.GetResponseStream());
                 result = reader.ReadToEnd();
 
-                await this.ShowMessageAsync("결과", result);
+                // await this.ShowMessageAsync("결과", result);
             }
             catch (Exception ex)
             {
@@ -111,24 +86,9 @@ namespace AssemblyAreaList
 
         private void CboDistrict_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand($"SELECT sgg_nm FROM AssemblyArea WHERE sgg_nm = @SelectedDistrict", conn);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataSet dSet = new DataSet();
-                adapter.Fill(dSet);
-                List<string> sggNms = new List<string>();
-
-                foreach (DataRow row in dSet.Tables[0].Rows)
-                {
-                    sggNms.Add(Convert.ToString(row["sgg_nm"]));
-                }
-
-                CboDistrict.ItemsSource = sggNms;
-            }
+ 
+     
         }
-
 
         //private void CboNeighborhood_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         //{
