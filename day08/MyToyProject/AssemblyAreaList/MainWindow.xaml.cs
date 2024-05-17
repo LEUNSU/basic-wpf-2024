@@ -1,10 +1,7 @@
-﻿using System;
-using System.Data;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Windows;
 using AssemblyAreaList.Models;
-using ControlzEx.Standard;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Data.SqlClient;
@@ -83,12 +80,61 @@ namespace AssemblyAreaList
                 StsResult.Content = $"OpenAPI {assemblyArea.Count}건 조회완료!";
             }
         }
+        private async void BtnSaveData_Click(object sender, RoutedEventArgs e)
+        {
+            if (GrdResult.Items.Count == 0)
+            {
+                await this.ShowMessageAsync("저장오류", "실시간 조회후 저장하십시오.");
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
+                {
+                    conn.Open();
+
+                    var insRes = 0;
+                    foreach (AssemblyArea item in GrdResult.Items)
+                    {
+                        SqlCommand cmd = new SqlCommand(Models.AssemblyArea.INSERT_QUERY, conn);
+                        cmd.Parameters.AddWithValue("@Arcd", item.Arcd);
+                        cmd.Parameters.AddWithValue("@Acmdfclty_sn", item.Acmdfclty_sn);
+                        cmd.Parameters.AddWithValue("@Ctprvn_nm", item.Ctprvn_nm);
+                        cmd.Parameters.AddWithValue("@Sgg_nm", item.Sgg_nm);
+                        cmd.Parameters.AddWithValue("@Vt_acmdfclty_nm", item.Vt_acmdfclty_nm);
+                        cmd.Parameters.AddWithValue("@Rdnmadr_cd", item.Rdnmadr_cd);
+                        cmd.Parameters.AddWithValue("@Bdong_cd", item.Bdong_cd);
+                        cmd.Parameters.AddWithValue("@Hdong_cd", item.Hdong_cd);
+                        cmd.Parameters.AddWithValue("@Dtl_adres", item.Dtl_adres);
+                        cmd.Parameters.AddWithValue("@Fclty_ar", item.Fclty_ar);
+                        cmd.Parameters.AddWithValue("@Mngps_nm", item.Mngps_nm);
+                        cmd.Parameters.AddWithValue("@Mngps_telno", item.Mngps_telno);
+                        cmd.Parameters.AddWithValue("@Vt_acmd_psbl_nmpr", item.Vt_acmd_psbl_nmpr);
+                        cmd.Parameters.AddWithValue("@Rn_adres", item.Rn_adres);
+
+                        insRes += cmd.ExecuteNonQuery();
+                    }
+
+                    if (insRes > 0)
+                    {
+                        await this.ShowMessageAsync("저장", "DB저장성공!");
+                        StsResult.Content = $"DB저장 {insRes}건 성공!";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await this.ShowMessageAsync("저장오류", $"저장오류 {ex.Message}");
+            }
+        }
 
         private void CboDistrict_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
  
      
         }
+
 
         //private void CboNeighborhood_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         //{

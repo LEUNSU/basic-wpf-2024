@@ -9,7 +9,7 @@
         xmlns:local="clr-namespace:AssemblyAreaList"
         mc:Ignorable="d"
         Title="Earthquake AssemblyArea List " Height="450" Width="800">
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -24,16 +24,20 @@
         <Grid Grid.Row="0">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="189*" />
-                <ColumnDefinition Width="211*" />
+                <ColumnDefinition Width="79*" />
+                <ColumnDefinition Width="121*" />
             </Grid.ColumnDefinitions>
 
             <Label Content="부산광역시 지진 발생 옥외대피장소" FontSize="16" FontWeight="Bold" Margin="20,10,20,10" />
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center"  Width="416">
-                <Button Content="조회" Width="100" Margin="20,10,10,10" 
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center"  Width="484">
+                <Button Content="조회" Width="80" Margin="20,10,10,10" 
                         Style="{StaticResource MahApps.Styles.Button.Square.Accent}" 
-                        Click="Button_Click" />
+                        Click="Button_Click" >
+                </Button>
+                <Button x:Name="BtnSaveData" Content="저장" Width="80" Margin="5,10" 
+                        Style="{StaticResource MahApps.Styles.Button.Square.Highlight}"
+                        Click="BtnSaveData_Click" />
 
                 <ComboBox x:Name="CboDistrict"  Width="120" Margin="10,10,10,10"
                           Style="{StaticResource MahApps.Styles.ComboBox}"
