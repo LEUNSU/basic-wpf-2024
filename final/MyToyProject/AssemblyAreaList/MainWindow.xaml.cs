@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Data;
+using System.IO;
 using System.Net;
 using System.Windows;
 using AssemblyAreaList.Models;
@@ -18,6 +19,50 @@ namespace AssemblyAreaList
         {
             InitializeComponent();
         }
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitComboDistrictFromDB();
+            //InitComboNeighborhoodFromDB();
+        }
+
+        private void InitComboDistrictFromDB()
+        {
+            using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(Models.AssemblyArea.GETDISTRICT_QUERY, conn);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet dSet = new DataSet();
+                adapter.Fill(dSet);
+                List<string> saveDistricts = new List<string>();
+
+                foreach (DataRow row in dSet.Tables[0].Rows)
+                {
+                    saveDistricts.Add(Convert.ToString(row["Save_District"]));
+                }
+
+                CboDistrict.ItemsSource = saveDistricts;
+            }
+        }
+        //private void InitComboNeighborhoodFromDB()
+        //{
+        //    using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
+        //    {
+        //        conn.Open();
+        //        SqlCommand cmd = new SqlCommand(Models.AssemblyArea.GETNEIGHBORHOOD_QUERY, conn);
+        //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+        //        DataSet dSet = new DataSet();
+        //        adapter.Fill(dSet);
+        //        List<string> saveNeighborhoods = new List<string>();
+
+        //        foreach (DataRow row in dSet.Tables[0].Rows)
+        //        {
+        //            saveNeighborhoods.Add(Convert.ToString(row["Save_Neighborhood"]));
+        //        }
+
+        //        CboNeighborhood.ItemsSource = saveNeighborhoods;
+        //    }
+        //}
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -58,21 +103,14 @@ namespace AssemblyAreaList
                 {
                     assemblyArea.Add(new AssemblyArea()
                     {
-                        Id = 0,
-                        Arcd = Convert.ToString(item["arcd"]),
-                        Acmdfclty_sn = Convert.ToString(item["acmdfclty_sn"]),
                         Ctprvn_nm = Convert.ToString(item["ctprvn_nm"]),
                         Sgg_nm = Convert.ToString(item["sgg_nm"]),
                         Vt_acmdfclty_nm = Convert.ToString(item["vt_acmdfclty_nm"]),
-                        Rdnmadr_cd = Convert.ToString(item["rdnmadr_cd"]),
-                        Bdong_cd = Convert.ToString(item["bdong_cd"]),
-                        Hdong_cd = Convert.ToString(item["hdong_cd"]),
                         Dtl_adres = Convert.ToString(item["dtl_adres"]),
-                        Fclty_ar = Convert.ToString(item["fclty_ar"]),
-                        Mngps_nm = Convert.ToString(item["mngps_nm"]),
-                        Mngps_telno = Convert.ToString(item["mngps_telno"]),
-                        Vt_acmd_psbl_nmpr = Convert.ToString(item["vt_acmd_psbl_nmpr"]),
                         Rn_adres = Convert.ToString(item["rn_adres"]),
+                        Fclty_ar = Convert.ToString(item["fclty_ar"]),
+                        Vt_acmd_psbl_nmpr = Convert.ToString(item["vt_acmd_psbl_nmpr"]),
+                        Mngps_telno = Convert.ToString(item["mngps_telno"])
                     });
                 }
 
@@ -98,20 +136,14 @@ namespace AssemblyAreaList
                     foreach (AssemblyArea item in GrdResult.Items)
                     {
                         SqlCommand cmd = new SqlCommand(Models.AssemblyArea.INSERT_QUERY, conn);
-                        cmd.Parameters.AddWithValue("@Arcd", item.Arcd);
-                        cmd.Parameters.AddWithValue("@Acmdfclty_sn", item.Acmdfclty_sn);
                         cmd.Parameters.AddWithValue("@Ctprvn_nm", item.Ctprvn_nm);
                         cmd.Parameters.AddWithValue("@Sgg_nm", item.Sgg_nm);
                         cmd.Parameters.AddWithValue("@Vt_acmdfclty_nm", item.Vt_acmdfclty_nm);
-                        cmd.Parameters.AddWithValue("@Rdnmadr_cd", item.Rdnmadr_cd);
-                        cmd.Parameters.AddWithValue("@Bdong_cd", item.Bdong_cd);
-                        cmd.Parameters.AddWithValue("@Hdong_cd", item.Hdong_cd);
                         cmd.Parameters.AddWithValue("@Dtl_adres", item.Dtl_adres);
-                        cmd.Parameters.AddWithValue("@Fclty_ar", item.Fclty_ar);
-                        cmd.Parameters.AddWithValue("@Mngps_nm", item.Mngps_nm);
-                        cmd.Parameters.AddWithValue("@Mngps_telno", item.Mngps_telno);
-                        cmd.Parameters.AddWithValue("@Vt_acmd_psbl_nmpr", item.Vt_acmd_psbl_nmpr);
                         cmd.Parameters.AddWithValue("@Rn_adres", item.Rn_adres);
+                        cmd.Parameters.AddWithValue("@Fclty_ar", item.Fclty_ar);
+                        cmd.Parameters.AddWithValue("@Vt_acmd_psbl_nmpr", item.Vt_acmd_psbl_nmpr);
+                        cmd.Parameters.AddWithValue("@Mngps_telno", item.Mngps_telno);
 
                         insRes += cmd.ExecuteNonQuery();
                     }
@@ -127,18 +159,93 @@ namespace AssemblyAreaList
             {
                 await this.ShowMessageAsync("저장오류", $"저장오류 {ex.Message}");
             }
+
+            InitComboDistrictFromDB();
+            //InitComboNeighborhoodFromDB();
         }
 
         private void CboDistrict_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
- 
-     
-        }
+            if (CboDistrict.SelectedValue != null)
+            {
+                using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
+                {
+                    conn.Open();
 
+                    SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY, conn);
+                    cmd.Parameters.AddWithValue("@Sgg_nm", CboDistrict.SelectedValue.ToString());
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataSet dSet = new DataSet();
+                    adapter.Fill(dSet, "AssemblyArea");
+                    var assemblyArea = new List<AssemblyArea>();
+
+                    foreach (DataRow row in dSet.Tables["AssemblyArea"].Rows)
+                    {
+                        assemblyArea.Add(new AssemblyArea
+                        {
+                            Ctprvn_nm = Convert.ToString(row["ctprvn_nm"]),
+                            Sgg_nm = Convert.ToString(row["sgg_nm"]),
+                            Vt_acmdfclty_nm = Convert.ToString(row["vt_acmdfclty_nm"]),
+                            Dtl_adres = Convert.ToString(row["dtl_adres"]),
+                            Rn_adres = Convert.ToString(row["rn_adres"]),
+                            Fclty_ar = Convert.ToString(row["fclty_ar"]),
+                            Vt_acmd_psbl_nmpr = Convert.ToString(row["vt_acmd_psbl_nmpr"]),
+                            Mngps_telno = Convert.ToString(row["mngps_telno"])
+                        });
+                    }
+
+                    this.DataContext = assemblyArea;
+                    StsResult.Content = $"DB {assemblyArea.Count}건 조회완료";
+                }
+            }
+            else
+            {
+                this.DataContext = null;
+                StsResult.Content = $"DB 조회클리어";
+            }
+
+        }
 
         //private void CboNeighborhood_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         //{
+        //    if (CboNeighborhood.SelectedValue != null)
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
+        //        {
+        //            conn.Open();
 
+        //            SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY, conn);
+        //            cmd.Parameters.AddWithValue("@Bdong_cd", CboNeighborhood.SelectedValue.ToString());
+        //            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+        //            DataSet dSet = new DataSet();
+        //            adapter.Fill(dSet, "AssemblyArea");
+        //            var assemblyArea = new List<AssemblyArea>();
+
+        //            foreach (DataRow row in dSet.Tables["AssemblyArea"].Rows)
+        //            {
+        //                assemblyArea.Add(new AssemblyArea
+        //                {
+        //                    Id = 0,
+        //                    Ctprvn_nm = Convert.ToString(row["ctprvn_nm"]),
+        //                    Sgg_nm = Convert.ToString(row["sgg_nm"]),
+        //                    Vt_acmdfclty_nm = Convert.ToString(row["vt_acmdfclty_nm"]),
+        //                    Dtl_adres = Convert.ToString(row["dtl_adres"]),
+        //                    Rn_adres = Convert.ToString(row["rn_adres"]),
+        //                    Fclty_ar = Convert.ToString(row["fclty_ar"]),
+        //                    Vt_acmd_psbl_nmpr = Convert.ToString(row["vt_acmd_psbl_nmpr"]),
+        //                    Mngps_telno = Convert.ToString(row["mngps_telno"]),
+        //                });
+        //            }
+
+        //            this.DataContext = assemblyArea;
+        //            StsResult.Content = $"DB {assemblyArea.Count}건 조회완료";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        this.DataContext = null;
+        //        StsResult.Content = $"DB 조회클리어";
+        //    }
         //}
     }
 }

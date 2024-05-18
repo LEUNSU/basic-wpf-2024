@@ -8,7 +8,7 @@
         xmlns:iconPack="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:local="clr-namespace:AssemblyAreaList"
         mc:Ignorable="d"
-        Title="Earthquake AssemblyArea List " Height="450" Width="800">
+        Title="Earthquake AssemblyArea List " Height="450" Width="800" Loaded="MetroWindow_Loaded">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -51,13 +51,24 @@
                           mah:TextBoxHelper.Watermark="동 선택" 
                           mah:TextBoxHelper.UseFloatingWatermark="True" 
                           mah:TextBoxHelper.ClearTextButton="True"/>
-                <!--SelectionChanged="CboNeighborhood_SelectionChanged"-->
+                          <!--SelectionChanged="CboNeighborhood_SelectionChanged"-->
             </StackPanel>
         </Grid>
 
         <DataGrid x:Name="GrdResult" Grid.Row="1" Margin="10,10,9,10"
-          IsReadOnly="True" ItemsSource="{Binding}"
-          Style="{StaticResource MahApps.Styles.DataGrid.Azure}" />
+          IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding}"
+          Style="{StaticResource MahApps.Styles.DataGrid.Azure}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Ctprvn_nm}" Header="시도명" Width="70"/>
+                <DataGridTextColumn Binding="{Binding Sgg_nm}" Header="시군구명" Width="70"/>
+                <DataGridTextColumn Binding="{Binding Vt_acmdfclty_nm}" Header="시설명" Width="155"/>
+                <DataGridTextColumn Binding="{Binding Dtl_adres}" Header="상세 주소" Width="201"/>
+                <DataGridTextColumn Binding="{Binding Rn_adres}" Header="도로명 주소" Width="310"/>
+                <DataGridTextColumn Binding="{Binding Fclty_ar}" Header="시설 면적(㎡)" Width="95"/>
+                <DataGridTextColumn Binding="{Binding Vt_acmd_psbl_nmpr}" Header="최대 수용 인원수(명)" Width="135"/>
+                <DataGridTextColumn Binding="{Binding Mngps_telno}" Header="관리기관 전화번호" Width="124"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <StatusBar Grid.Row="1" Margin="0,354,0,0" Grid.RowSpan="2">
             <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}" />
