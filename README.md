@@ -160,8 +160,7 @@ https://github.com/LEUNSU/basic-wpf-2024/assets/158007401/ded92462-3a71-4cc3-98c
     - Newtonsoft.Json
     - 개인 프로젝트 참조 소스
 
-## 8일차
-- WPF 개인프로젝트 포트폴리오 작업
+## WPF 개인프로젝트
     - 데이터포털 API 사용할 것
     - 7일차 소스 참조
     
@@ -169,10 +168,13 @@ https://github.com/LEUNSU/basic-wpf-2024/assets/158007401/ded92462-3a71-4cc3-98c
 
     1. 기능 
         - 
+        -
         
     2. 특징
         - 
+        -
 
     3. 배운 점
         - 
+        -
 
