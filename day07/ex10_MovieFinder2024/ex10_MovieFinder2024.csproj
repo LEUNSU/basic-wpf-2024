@@ -11,13 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="images\**" />
-    <EmbeddedResource Remove="images\**" />
-    <None Remove="images\**" />
-    <Page Remove="images\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="No_Picture.png" />
   </ItemGroup>
 
