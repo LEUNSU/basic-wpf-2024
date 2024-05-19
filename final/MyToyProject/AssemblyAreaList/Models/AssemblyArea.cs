@@ -1,4 +1,7 @@
-﻿namespace AssemblyAreaList.Models
+﻿using ControlzEx.Theming;
+using System;
+
+namespace AssemblyAreaList.Models
 {
     public class AssemblyArea
     {
@@ -12,6 +15,8 @@
         public string Fclty_ar { get; set; } // 시설 면적
         public string Vt_acmd_psbl_nmpr { get; set; } // 최대 수용 인원수
         public string Mngps_telno { get; set; } // 관리기관 전화번호
+        public double Xcord { get; set; } // 경도
+        public double Ycord { get; set; } // 위도
 
         public static readonly string INSERT_QUERY = @"INSERT INTO [dbo].[AssemblyArea]
                                                                    ([Ctprvn_nm]
@@ -21,7 +26,9 @@
                                                                    ,[Rn_adres]
                                                                    ,[Fclty_ar]
                                                                    ,[Vt_acmd_psbl_nmpr]
-                                                                   ,[Mngps_telno])
+                                                                   ,[Mngps_telno]
+                                                                   ,[Xcord]
+                                                                   ,[Ycord])
                                                              VALUES
                                                                    (@Ctprvn_nm
                                                                    ,@Sgg_nm
@@ -30,21 +37,37 @@
                                                                    ,@Rn_adres
                                                                    ,@Fclty_ar
                                                                    ,@Vt_acmd_psbl_nmpr
-                                                                   ,@Mngps_telno)";
+                                                                   ,@Mngps_telno
+                                                                   ,@Xcord
+                                                                   ,@Ycord)";
 
-        public static readonly string SELECT_QUERY = @"SELECT  [Ctprvn_nm]
-                                                              ,[Sgg_nm]
-                                                              ,[Vt_acmdfclty_nm]
-                                                              ,[Dtl_adres]
-                                                              ,[Rn_adres] 
-                                                              ,[Fclty_ar]
-                                                              ,[Vt_acmd_psbl_nmpr]
-                                                              ,[Mngps_telno]
-                                                          FROM [dbo].[AssemblyArea]";
+        public static readonly string SELECT_QUERY_DISTRICT = @"SELECT  [Ctprvn_nm]
+                                                                       ,[Sgg_nm]
+                                                                       ,[Vt_acmdfclty_nm]
+                                                                       ,[Dtl_adres]
+                                                                       ,[Rn_adres] 
+                                                                       ,[Fclty_ar]
+                                                                       ,[Vt_acmd_psbl_nmpr]
+                                                                       ,[Mngps_telno]
+                                                                       ,[Xcord]
+                                                                       ,[Ycord]
+                                                                  FROM [dbo].[AssemblyArea]
+                                                                 WHERE [Sgg_nm] = @Sgg_nm";
 
         public static readonly string GETDISTRICT_QUERY = @"SELECT [Sgg_nm] AS Save_District
                                                           FROM [dbo].[AssemblyArea]
                                                          GROUP BY [Sgg_nm]";
+
+        //public static readonly string SELECT_QUERY_NEIGHBORHOOD = @"SELECT  [Ctprvn_nm]
+        //                                                                   ,[Sgg_nm]
+        //                                                                   ,[Vt_acmdfclty_nm]
+        //                                                                   ,[Dtl_adres]
+        //                                                                   ,[Rn_adres] 
+        //                                                                   ,[Fclty_ar]
+        //                                                                   ,[Vt_acmd_psbl_nmpr]
+        //                                                                   ,[Mngps_telno]
+        //                                                              FROM [dbo].[AssemblyArea]
+        //                                                             WHERE [Sgg_nm] = @Sgg_nm";
 
         //public static readonly string GETNEIGHBORHOOD_QUERY = @"SELECT [Bdong_cd] AS Save_Neighborhood
         //                                                  FROM [dbo].[AssemblyArea]

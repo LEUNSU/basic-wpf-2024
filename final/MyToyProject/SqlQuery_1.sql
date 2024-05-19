@@ -6,6 +6,8 @@
    [Rn_adres] [nvarchar](50) NULL,
    [Fclty_ar] [varchar](20) NULL,
    [Vt_acmd_psbl_nmpr] [nvarchar](50) NULL,
-   [Mngps_telno] [nvarchar](50) NULL
+   [Mngps_telno] [nvarchar](50) NULL,
+   [Coordx] [float] NULL,
+   [Coordy] [float] NULL
    )
 GO

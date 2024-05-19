@@ -57,7 +57,8 @@
 
         <DataGrid x:Name="GrdResult" Grid.Row="1" Margin="10,10,9,10"
           IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding}"
-          Style="{StaticResource MahApps.Styles.DataGrid.Azure}">
+          Style="{StaticResource MahApps.Styles.DataGrid.Azure}"
+                  MouseDoubleClick="GrdResult_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Ctprvn_nm}" Header="시도명" Width="70"/>
                 <DataGridTextColumn Binding="{Binding Sgg_nm}" Header="시군구명" Width="70"/>
@@ -67,6 +68,7 @@
                 <DataGridTextColumn Binding="{Binding Fclty_ar}" Header="시설 면적(㎡)" Width="95"/>
                 <DataGridTextColumn Binding="{Binding Vt_acmd_psbl_nmpr}" Header="최대 수용 인원수(명)" Width="135"/>
                 <DataGridTextColumn Binding="{Binding Mngps_telno}" Header="관리기관 전화번호" Width="124"/>
+
             </DataGrid.Columns>
         </DataGrid>
 

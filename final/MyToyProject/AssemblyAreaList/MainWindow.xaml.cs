@@ -110,7 +110,9 @@ namespace AssemblyAreaList
                         Rn_adres = Convert.ToString(item["rn_adres"]),
                         Fclty_ar = Convert.ToString(item["fclty_ar"]),
                         Vt_acmd_psbl_nmpr = Convert.ToString(item["vt_acmd_psbl_nmpr"]),
-                        Mngps_telno = Convert.ToString(item["mngps_telno"])
+                        Mngps_telno = Convert.ToString(item["mngps_telno"]),
+                        Xcord = Convert.ToDouble(item["xcord"]),
+                        Ycord = Convert.ToDouble(item["ycord"])
                     });
                 }
 
@@ -144,6 +146,8 @@ namespace AssemblyAreaList
                         cmd.Parameters.AddWithValue("@Fclty_ar", item.Fclty_ar);
                         cmd.Parameters.AddWithValue("@Vt_acmd_psbl_nmpr", item.Vt_acmd_psbl_nmpr);
                         cmd.Parameters.AddWithValue("@Mngps_telno", item.Mngps_telno);
+                        cmd.Parameters.AddWithValue("@Xcord", item.Xcord);
+                        cmd.Parameters.AddWithValue("@Ycord", item.Ycord);
 
                         insRes += cmd.ExecuteNonQuery();
                     }
@@ -172,7 +176,7 @@ namespace AssemblyAreaList
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY, conn);
+                    SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY_DISTRICT, conn);
                     cmd.Parameters.AddWithValue("@Sgg_nm", CboDistrict.SelectedValue.ToString());
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataSet dSet = new DataSet();
@@ -190,7 +194,9 @@ namespace AssemblyAreaList
                             Rn_adres = Convert.ToString(row["rn_adres"]),
                             Fclty_ar = Convert.ToString(row["fclty_ar"]),
                             Vt_acmd_psbl_nmpr = Convert.ToString(row["vt_acmd_psbl_nmpr"]),
-                            Mngps_telno = Convert.ToString(row["mngps_telno"])
+                            Mngps_telno = Convert.ToString(row["mngps_telno"]),
+                            Xcord = Convert.ToDouble(row["xcord"]),
+                            Ycord = Convert.ToDouble(row["ycord"])
                         });
                     }
 
@@ -206,6 +212,7 @@ namespace AssemblyAreaList
 
         }
 
+
         //private void CboNeighborhood_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         //{
         //    if (CboNeighborhood.SelectedValue != null)
@@ -214,7 +221,7 @@ namespace AssemblyAreaList
         //        {
         //            conn.Open();
 
-        //            SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY, conn);
+        //            SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY_NEIGHBORHOOD, conn);
         //            cmd.Parameters.AddWithValue("@Bdong_cd", CboNeighborhood.SelectedValue.ToString());
         //            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
         //            DataSet dSet = new DataSet();
@@ -224,8 +231,7 @@ namespace AssemblyAreaList
         //            foreach (DataRow row in dSet.Tables["AssemblyArea"].Rows)
         //            {
         //                assemblyArea.Add(new AssemblyArea
-        //                {
-        //                    Id = 0,
+        //                { 
         //                    Ctprvn_nm = Convert.ToString(row["ctprvn_nm"]),
         //                    Sgg_nm = Convert.ToString(row["sgg_nm"]),
         //                    Vt_acmdfclty_nm = Convert.ToString(row["vt_acmdfclty_nm"]),
@@ -247,5 +253,14 @@ namespace AssemblyAreaList
         //        StsResult.Content = $"DB 조회클리어";
         //    }
         //}
+        private void GrdResult_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var curItem = GrdResult.SelectedItem as AssemblyArea;
+
+            var mapWindow = new MapWindow(curItem.Ycord, curItem.Xcord);
+            mapWindow.Owner = this;
+            mapWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            mapWindow.ShowDialog();
+        }
     }
 }
