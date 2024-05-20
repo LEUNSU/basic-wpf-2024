@@ -163,7 +163,14 @@ https://github.com/LEUNSU/basic-wpf-2024/assets/158007401/ded92462-3a71-4cc3-98c
 ## WPF 개인프로젝트
 - 데이터포털 API 연동앱 
     
-    ![실행화면](https://raw.githubusercontent.com/LEUNSU/basic-wpf-2024/main/images/wpf006.png)
+
+
+
+https://github.com/LEUNSU/basic-wpf-2024/assets/158007401/3e097a69-5e74-4ed2-b43f-8cba818e299d
+
+
+
+
 
     1. 기능 
         - 
