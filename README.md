@@ -166,7 +166,7 @@ https://github.com/LEUNSU/basic-wpf-2024/assets/158007401/ded92462-3a71-4cc3-98c
 
 
 
-https://github.com/LEUNSU/basic-wpf-2024/assets/158007401/3e097a69-5e74-4ed2-b43f-8cba818e299d
+https://github.com/LEUNSU/basic-wpf-2024/assets/158007401/c12f2301-bc7e-4950-b0cd-78ac9873d50e
 
 
 
