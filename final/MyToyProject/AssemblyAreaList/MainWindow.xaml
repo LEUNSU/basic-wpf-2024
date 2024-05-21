@@ -7,9 +7,14 @@
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:iconPack="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:local="clr-namespace:AssemblyAreaList"
-        mc:Ignorable="d"
-        Title="Earthquake AssemblyArea List " Height="450" Width="800" Loaded="MetroWindow_Loaded">
-
+    mc:Ignorable="d"
+        Title="Earthquake AssemblyArea List" Height="450" Width="800" Loaded="MetroWindow_Loaded" >
+    <mah:MetroWindow.IconTemplate>
+        <DataTemplate>
+            <iconPack:PackIconRemixIcon Kind="EarthquakeFill" Margin="10,7,0,0" Foreground="White" />
+        </DataTemplate>
+    </mah:MetroWindow.IconTemplate>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -50,8 +55,8 @@
                           Style="{StaticResource MahApps.Styles.ComboBox}"
                           mah:TextBoxHelper.Watermark="동 선택" 
                           mah:TextBoxHelper.UseFloatingWatermark="True" 
-                          mah:TextBoxHelper.ClearTextButton="True"/>
-                          <!--SelectionChanged="CboNeighborhood_SelectionChanged"-->
+                          mah:TextBoxHelper.ClearTextButton="True"
+                          SelectionChanged="CboNeighborhood_SelectionChanged" />
             </StackPanel>
         </Grid>
 

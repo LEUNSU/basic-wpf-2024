@@ -18,6 +18,7 @@ namespace AssemblyAreaList.Models
         public double Xcord { get; set; } // 경도
         public double Ycord { get; set; } // 위도
 
+
         public static readonly string INSERT_QUERY = @"INSERT INTO [dbo].[AssemblyArea]
                                                                    ([Ctprvn_nm]
                                                                    ,[Sgg_nm]
@@ -58,21 +59,25 @@ namespace AssemblyAreaList.Models
                                                           FROM [dbo].[AssemblyArea]
                                                          GROUP BY [Sgg_nm]";
 
-        //public static readonly string SELECT_QUERY_NEIGHBORHOOD = @"SELECT  [Ctprvn_nm]
-        //                                                                   ,[Sgg_nm]
-        //                                                                   ,[Vt_acmdfclty_nm]
-        //                                                                   ,[Dtl_adres]
-        //                                                                   ,[Rn_adres] 
-        //                                                                   ,[Fclty_ar]
-        //                                                                   ,[Vt_acmd_psbl_nmpr]
-        //                                                                   ,[Mngps_telno]
-        //                                                              FROM [dbo].[AssemblyArea]
-        //                                                             WHERE [Sgg_nm] = @Sgg_nm";
+        public static string SELECT_QUERY_NEIGHBORHOOD = @"SELECT [Ctprvn_nm]
+                                                                 ,[Sgg_nm]
+                                                                 ,[Vt_acmdfclty_nm]
+                                                                 ,[Dtl_adres]
+                                                                 ,[Rn_adres] 
+                                                                 ,[Fclty_ar]
+                                                                 ,[Vt_acmd_psbl_nmpr]
+                                                                 ,[Mngps_telno]
+                                                                 ,[Xcord]
+                                                                 ,[Ycord]
+                                                            FROM [dbo].[AssemblyArea]
+                                                           WHERE [Sgg_nm] = @Sgg_nm AND Dtl_adres LIKE '%' + @Dong + '%'";
 
-        //public static readonly string GETNEIGHBORHOOD_QUERY = @"SELECT [Bdong_cd] AS Save_Neighborhood
-        //                                                  FROM [dbo].[AssemblyArea]
-        //                                                 GROUP BY [Bdong_cd]";
-
+        public static string SELECT_QUERY_DONG = @"SELECT DISTINCT TRIM(REPLACE((RIGHT(b.Sub_adres, CHARINDEX(' ', b.Sub_adres) + 1)), '구 ', '')) AS Dong
+	                                                FROM (  
+	                                                SELECT LEFT(TRIM(REPLACE(Dtl_adres, '부산광역시', '')), PATINDEX('%[구군]%', Dtl_adres) - 1) AS Sub_adres
+		                                                FROM AssemblyArea 
+		                                                WHERE Dtl_adres LIKE '%' + @District + '%'
+	                                                ) AS b";
 
     }
 }

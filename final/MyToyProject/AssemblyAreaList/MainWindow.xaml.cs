@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Windows;
@@ -49,7 +50,7 @@ namespace AssemblyAreaList
         //    using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
         //    {
         //        conn.Open();
-        //        SqlCommand cmd = new SqlCommand(Models.AssemblyArea.GETNEIGHBORHOOD_QUERY, conn);
+        //        SqlCommand cmd = new SqlCommand(Models.AssemblyArea.GETDONG_QUERY, conn);
         //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
         //        DataSet dSet = new DataSet();
         //        adapter.Fill(dSet);
@@ -66,7 +67,7 @@ namespace AssemblyAreaList
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            string url = "https://apis.data.go.kr/1741000/EmergencyAssemblyArea_Earthquake5/getArea4List2?ServiceKey=2vtB4IK7A0Zdd3%2B0mcat%2FfF%2BiLxEh3BGGnmVdWl3p8N3e6k%2FklfFCL7q2rG%2FXW1FAwGS2KNUK6iAyZSZRs%2B31w%3D%3D&pageNo=1&numOfRows=100&type=JSON&ctprvn_nm=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C";
+            string url = "https://apis.data.go.kr/1741000/EmergencyAssemblyArea_Earthquake5/getArea4List2?ServiceKey=2vtB4IK7A0Zdd3%2B0mcat%2FfF%2BiLxEh3BGGnmVdWl3p8N3e6k%2FklfFCL7q2rG%2FXW1FAwGS2KNUK6iAyZSZRs%2B31w%3D%3D&pageNo=1&numOfRows=200&type=JSON&ctprvn_nm=%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C";
             string result = string.Empty;
 
             // WebRequest, WebResponse 객체
@@ -203,6 +204,26 @@ namespace AssemblyAreaList
                     this.DataContext = assemblyArea;
                     StsResult.Content = $"DB {assemblyArea.Count}건 조회완료";
                 }
+
+                // 선택된 값으로 동선택 콤보박스 값을 DB에서 읽어와서 출력
+                using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY_DONG, conn);
+                    cmd.Parameters.AddWithValue("@District", CboDistrict.SelectedValue.ToString());
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataSet dSet = new DataSet();
+                    adapter.Fill(dSet);
+                    List<string> saveDong = new List<string>();
+
+                    foreach (DataRow row in dSet.Tables[0].Rows)
+                    {
+                        saveDong.Add(Convert.ToString(row["Dong"]));
+                    }
+
+                    CboNeighborhood.ItemsSource = saveDong;
+                }
             }
             else
             {
@@ -212,47 +233,6 @@ namespace AssemblyAreaList
 
         }
 
-
-        //private void CboNeighborhood_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        //{
-        //    if (CboNeighborhood.SelectedValue != null)
-        //    {
-        //        using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
-        //        {
-        //            conn.Open();
-
-        //            SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY_NEIGHBORHOOD, conn);
-        //            cmd.Parameters.AddWithValue("@Bdong_cd", CboNeighborhood.SelectedValue.ToString());
-        //            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-        //            DataSet dSet = new DataSet();
-        //            adapter.Fill(dSet, "AssemblyArea");
-        //            var assemblyArea = new List<AssemblyArea>();
-
-        //            foreach (DataRow row in dSet.Tables["AssemblyArea"].Rows)
-        //            {
-        //                assemblyArea.Add(new AssemblyArea
-        //                { 
-        //                    Ctprvn_nm = Convert.ToString(row["ctprvn_nm"]),
-        //                    Sgg_nm = Convert.ToString(row["sgg_nm"]),
-        //                    Vt_acmdfclty_nm = Convert.ToString(row["vt_acmdfclty_nm"]),
-        //                    Dtl_adres = Convert.ToString(row["dtl_adres"]),
-        //                    Rn_adres = Convert.ToString(row["rn_adres"]),
-        //                    Fclty_ar = Convert.ToString(row["fclty_ar"]),
-        //                    Vt_acmd_psbl_nmpr = Convert.ToString(row["vt_acmd_psbl_nmpr"]),
-        //                    Mngps_telno = Convert.ToString(row["mngps_telno"]),
-        //                });
-        //            }
-
-        //            this.DataContext = assemblyArea;
-        //            StsResult.Content = $"DB {assemblyArea.Count}건 조회완료";
-        //        }
-        //    }
-        //    else
-        //    {
-        //        this.DataContext = null;
-        //        StsResult.Content = $"DB 조회클리어";
-        //    }
-        //}
         private void GrdResult_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var curItem = GrdResult.SelectedItem as AssemblyArea;
@@ -261,6 +241,48 @@ namespace AssemblyAreaList
             mapWindow.Owner = this;
             mapWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             mapWindow.ShowDialog();
+        }
+
+        private void CboNeighborhood_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (CboDistrict.SelectedValue != null && CboNeighborhood.SelectedValue != null)
+            {
+                using (SqlConnection conn = new SqlConnection(Helpers.Common.CONNSTRING))
+                {
+                    conn.Open();
+
+                    // 선택된 구와 동에 맞는 데이터를 조회하기 위한 SQL 명령어 설정
+                    SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY_NEIGHBORHOOD, conn);
+                    cmd.Parameters.AddWithValue("@Sgg_nm", CboDistrict.SelectedValue.ToString());
+                    cmd.Parameters.AddWithValue("@Dong", CboNeighborhood.SelectedValue.ToString());
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataSet dSet = new DataSet();
+                    adapter.Fill(dSet, "AssemblyArea");
+                    var assemblyArea = new List<AssemblyArea>();
+
+                    // 조회된 데이터를 AssemblyArea 리스트로 변환
+                    foreach (DataRow row in dSet.Tables["AssemblyArea"].Rows)
+                    {
+                        assemblyArea.Add(new AssemblyArea
+                        {
+                            Ctprvn_nm = Convert.ToString(row["ctprvn_nm"]),
+                            Sgg_nm = Convert.ToString(row["sgg_nm"]),
+                            Vt_acmdfclty_nm = Convert.ToString(row["vt_acmdfclty_nm"]),
+                            Dtl_adres = Convert.ToString(row["dtl_adres"]),
+                            Rn_adres = Convert.ToString(row["rn_adres"]),
+                            Fclty_ar = Convert.ToString(row["fclty_ar"]),
+                            Vt_acmd_psbl_nmpr = Convert.ToString(row["vt_acmd_psbl_nmpr"]),
+                            Mngps_telno = Convert.ToString(row["mngps_telno"]),
+                            Xcord = Convert.ToDouble(row["xcord"]),
+                            Ycord = Convert.ToDouble(row["ycord"])
+                        });
+                    }
+
+                    // 조회된 데이터를 DataContext에 바인딩하여 UI에 표시
+                    this.DataContext = assemblyArea;
+                    StsResult.Content = $"DB {assemblyArea.Count}건 조회완료";
+                }
+            }
         }
     }
 }
