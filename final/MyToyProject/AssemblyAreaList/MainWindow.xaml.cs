@@ -251,7 +251,7 @@ namespace AssemblyAreaList
                 {
                     conn.Open();
 
-                    // 선택된 구와 동에 맞는 데이터를 조회하기 위한 SQL 명령어 설정
+                    // 선택된 구와 동에 맞는 데이터를 조회
                     SqlCommand cmd = new SqlCommand(Models.AssemblyArea.SELECT_QUERY_NEIGHBORHOOD, conn);
                     cmd.Parameters.AddWithValue("@Sgg_nm", CboDistrict.SelectedValue.ToString());
                     cmd.Parameters.AddWithValue("@Dong", CboNeighborhood.SelectedValue.ToString());
@@ -260,7 +260,6 @@ namespace AssemblyAreaList
                     adapter.Fill(dSet, "AssemblyArea");
                     var assemblyArea = new List<AssemblyArea>();
 
-                    // 조회된 데이터를 AssemblyArea 리스트로 변환
                     foreach (DataRow row in dSet.Tables["AssemblyArea"].Rows)
                     {
                         assemblyArea.Add(new AssemblyArea
